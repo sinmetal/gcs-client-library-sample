@@ -1,0 +1,17 @@
+.classpath
+.factorypath
+.project
+*.prefs
+
+.idea
+
+*.war
+*.jar
+*.class
+
+/target/*
+src/main/webapp/WEB-INF/classes/*
+src/main/webapp/WEB-INF/appengine-generated/*
+/www-test/*
+
+*Meta.java
