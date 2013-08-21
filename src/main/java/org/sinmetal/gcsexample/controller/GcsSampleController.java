@@ -87,8 +87,12 @@ public class GcsSampleController extends Controller {
 				bytesRead = input.read(buffer);
 			}
 		} finally {
-			input.close();
-			output.close();
+			if (input != null) {
+				input.close();
+			}
+			if (output != null) {
+				output.close();
+			}
 		}
 	}
 }

@@ -20,7 +20,28 @@ public class GcsSampleControllerTest extends ControllerTestCase {
 	 */
 	@Test
 	public void run() throws Exception {
-		tester.start("/gcs");
+		tester.request.setMethod("GET");
+		tester.param("bucketName", "testbucket");
+		tester.param("filePath", "hogefile");
+		tester.start("/gcsSample");
+
+		Controller controller = tester.getController();
+		assertThat(controller, instanceOf(GcsSampleControllerTest.class));
+		assertThat(controller, is(notNullValue()));
+		assertThat(tester.isRedirect(), is(false));
+		assertThat(tester.getDestinationPath(), is(nullValue()));
+	}
+
+	@Test
+	public void post() throws Exception {
+		tester.request.setMethod("POST");
+		tester.param("bucketName", "testbucket");
+		tester.param("filepath", "hogefile");
+		tester.addBlobKey("", "");
+		//InputStream inputStream = "";
+		//tester.request.set
+		tester.start("/gcsSample");
+
 		Controller controller = tester.getController();
 		assertThat(controller, instanceOf(GcsSampleControllerTest.class));
 		assertThat(controller, is(notNullValue()));
