@@ -12,6 +12,7 @@ import org.slim3.controller.upload.FileItem;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.tools.cloudstorage.GcsFileMetadata;
 import com.google.appengine.tools.cloudstorage.GcsFileOptions;
 import com.google.appengine.tools.cloudstorage.GcsFilename;
 import com.google.appengine.tools.cloudstorage.GcsInputChannel;
@@ -60,16 +61,22 @@ public class FileUploadController extends Controller {
 							+ fileName.getObjectName());
 			blobstoreService.serve(blobKey, response);
 		} else {
+			GcsService gcsService = GcsServiceFactory.createGcsService();
+			GcsFileMetadata metadata = gcsService.getMetadata(fileName);
+			response.setContentType(metadata.getOptions().getMimeType());
 			GcsInputChannel readChannel =
 					gcsService.openPrefetchingReadChannel(fileName, 0, BUFFER_SIZE);
+
 			copy(Channels.newInputStream(readChannel), response.getOutputStream());
 		}
 	}
 
 	private void doPost() throws IOException {
 		FileItem fileItem = requestScope("uploadFile");
+
 		GcsOutputChannel outputChannel =
-				gcsService.createOrReplace(getFileName(), GcsFileOptions.getDefaultInstance());
+				gcsService.createOrReplace(getFileName(),
+						new GcsFileOptions.Builder().mimeType(fileItem.getContentType()).build());
 		//copy(request.getInputStream(), Channels.newOutputStream(outputChannel));
 		OutputStream outputStream = Channels.newOutputStream(outputChannel);
 		try {
@@ -82,7 +89,7 @@ public class FileUploadController extends Controller {
 	private GcsFilename getFileName() {
 		//final String bucketName = asString("bucketName");
 		//final String filePath = asString("filePath");
-		return new GcsFilename("test", "hoge");
+		return new GcsFilename("sinpkmnms-pro", "hoge");
 	}
 
 	private void copy(InputStream input, OutputStream output) throws IOException {
