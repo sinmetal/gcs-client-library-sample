@@ -22,10 +22,10 @@ import com.google.appengine.tools.cloudstorage.GcsServiceFactory;
 import com.google.appengine.tools.cloudstorage.RetryParams;
 
 /**
- * GCSにFileをUploadする
+ * gcsとFileをやりとりするサンプル
  * @author sinmetal
  */
-public class FileUploadController extends Controller {
+public class FileController extends Controller {
 
 	private final GcsService gcsService = GcsServiceFactory
 		.createGcsService(new RetryParams.Builder().initialRetryDelayMillis(10)
@@ -77,7 +77,6 @@ public class FileUploadController extends Controller {
 		GcsOutputChannel outputChannel =
 				gcsService.createOrReplace(getFileName(),
 						new GcsFileOptions.Builder().mimeType(fileItem.getContentType()).build());
-		//copy(request.getInputStream(), Channels.newOutputStream(outputChannel));
 		OutputStream outputStream = Channels.newOutputStream(outputChannel);
 		try {
 			outputStream.write(fileItem.getData());
@@ -87,9 +86,8 @@ public class FileUploadController extends Controller {
 	}
 
 	private GcsFilename getFileName() {
-		//final String bucketName = asString("bucketName");
-		//final String filePath = asString("filePath");
-		return new GcsFilename("sinpkmnms-pro", "hoge");
+		// your gcs bucket name and file name
+		return new GcsFilename("sinpkmnms-pro", "samplefile");
 	}
 
 	private void copy(InputStream input, OutputStream output) throws IOException {

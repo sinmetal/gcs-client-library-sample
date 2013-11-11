@@ -19,7 +19,7 @@
                 var formData = new FormData($form[0]);
                 var promise = $.ajax({
                     type: "POST",
-                    url: "/fileUpload",
+                    url: "/file",
                     processData: false,
                     contentType: false,
                     data: formData
@@ -39,10 +39,8 @@
 <body>
 
 <form id="entryForm">
-    <input name="bucketName" type="text" placeholder="CloudStorageのバケット名を入力してください">
-    <input name="filePath" type="text" placeholder="filepath">
-  　ロゴ画像:<input name="uploadFile" type="file" enctype="multipart/form-data">
-    <button id="create">作成する</button>
+  　<input name="uploadFile" type="file" enctype="multipart/form-data">
+    <button id="create">Upload</button>
 </form>
 
 </body>
