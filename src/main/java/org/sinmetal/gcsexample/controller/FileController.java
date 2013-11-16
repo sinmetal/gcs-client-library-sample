@@ -33,7 +33,7 @@ public class FileController extends Controller {
 
 	private static final int BUFFER_SIZE = 2 * 1024 * 1024;
 
-	/** Blobstoreを使うか */
+	/** Blobstore APIを使うか */
 	public static final boolean SERVE_USING_BLOBSTORE_API = false;
 
 
