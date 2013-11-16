@@ -12,6 +12,7 @@ import org.slim3.datastore.Datastore;
 import org.slim3.util.StringUtil;
 
 import com.google.appengine.api.blobstore.BlobInfo;
+import com.google.appengine.api.blobstore.BlobInfoFactory;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
@@ -68,6 +69,13 @@ public class UploadFileController extends Controller {
 	private void downloadGcsFile(BlobKey blobKey) throws Exception {
 		System.out.println("downloadGcsFile");
 
+		BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
+		if (StringUtil.isEmpty(blobInfo.getContentType()) == false) {
+			response.setContentType(blobInfo.getContentType());
+		} else {
+			response.setContentType("application/octet-stream");
+		}
+		response.setContentLength((int) blobInfo.getSize());
 		blobstoreService.serve(blobKey, response);
 	}
 
