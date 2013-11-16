@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>test</title>
+<title>GSC File Upload Sample (Direct)</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
@@ -29,10 +29,8 @@
 			type : "GET",
 			url : "/blobContent",
 		}).success(function(data) {
-			console.log(data);
 			var blobContents = JSON.parse(data);
 			for (var i = 0; i < blobContents.length; i++) {
-				console.log(blobContents[i]);
 				$("#list").append("<li><a href=/uploadFile?key=" + blobContents[i].key.name + ">" + blobContents[i].filename + "</a></li>");
 			}
 		}).error(function() {
