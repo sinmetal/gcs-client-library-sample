@@ -77,11 +77,8 @@ public class FileController extends Controller {
 		GcsOutputChannel outputChannel =
 				gcsService.createOrReplace(getFileName(),
 						new GcsFileOptions.Builder().mimeType(fileItem.getContentType()).build());
-		OutputStream outputStream = Channels.newOutputStream(outputChannel);
-		try {
+		try (OutputStream outputStream = Channels.newOutputStream(outputChannel)) {
 			outputStream.write(fileItem.getData());
-		} finally {
-			outputStream.close();
 		}
 	}
 
