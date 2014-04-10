@@ -1,6 +1,5 @@
 package org.sinmetal.gcsexample.controller;
 
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -11,6 +10,7 @@ import org.slim3.controller.Navigation;
 import org.slim3.datastore.Datastore;
 import org.slim3.util.StringUtil;
 
+import com.google.appengine.api.appidentity.AppIdentityServiceFactory;
 import com.google.appengine.api.blobstore.BlobInfo;
 import com.google.appengine.api.blobstore.BlobInfoFactory;
 import com.google.appengine.api.blobstore.BlobKey;
@@ -23,8 +23,6 @@ import com.google.appengine.api.blobstore.UploadOptions;
  * @author sinmetal
  */
 public class UploadFileController extends Controller {
-
-	private static final String BUCKET = "sinpkmnms-pro";
 
 	private BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
 
@@ -54,15 +52,20 @@ public class UploadFileController extends Controller {
 
 		final long MEGA_BYTE = 1024 * 1024 * 1024;
 
+		final String defaultGcsBucketName =
+				AppIdentityServiceFactory.getAppIdentityService().getDefaultGcsBucketName();
+		System.out.println(defaultGcsBucketName);
+
 		final UploadOptions options =
-				UploadOptions.Builder.withGoogleStorageBucketName(BUCKET).maxUploadSizeBytes(
-						100 * MEGA_BYTE);
+				UploadOptions.Builder.withGoogleStorageBucketName(defaultGcsBucketName)
+					.maxUploadSizeBytes(100 * MEGA_BYTE);
 		final String url =
 				BlobstoreServiceFactory.getBlobstoreService().createUploadUrl("/uploadFile",
 						options);
+		System.out.println("URL : " + url);
 		response.setCharacterEncoding("utf-8");
 		response.setContentType("application/json");
-		response.getWriter().println("{\"url\":\"" + new URL(url).getPath() + "\"}");
+		response.getWriter().println("{\"url\":\"" + url + "\"}");
 		response.flushBuffer();
 	}
 
